@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" metadata-complete="false" version="3.1">
+  <display-name>tdsapi</display-name>
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+  <context-param>
+    <param-name>url</param-name>
+    <param-value>jdbc:oracle:thin:@developmentb.cbzwztcxfluc.eu-west-1.rds.amazonaws.com:1521:devsuite</param-value>
+  </context-param>
+  <context-param>
+    <param-name>username</param-name>
+    <param-value>candidate</param-value>
+  </context-param>
+  <context-param>
+    <param-name>password</param-name>
+    <param-value>INTtestv1</param-value>
+  </context-param>
+</web-app>
