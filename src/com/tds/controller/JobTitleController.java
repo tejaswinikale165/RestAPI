@@ -25,10 +25,10 @@ public class JobTitleController extends HttpServlet {
   //Handling get request for two url types /job_titles and /job_titles/:{department_name} using switch to matching the pattern
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		
-		if(!("candidate".equals((String) this.getServletContext().getInitParameter("username"))&& "INTtestv1".equals((String)request.getServletContext().getInitParameter("password"))))
+		//Checking authentication, this parameter is set in servlet listener when connect to database
+		if("false".equals((String) this.getServletContext().getInitParameter("authorized")))
 			{
-				response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+				response.sendError(HttpServletResponse.SC_UNAUTHORIZED,"Invalid username or password");
 				return;
 			}
 		
@@ -60,11 +60,13 @@ public class JobTitleController extends HttpServlet {
 						if(!jobTitleDetails.getJobTilesByDept(departmentName).isEmpty())
 							{
 								response.getWriter().print(gson.toJson(jobTitleDetails.getJobTilesByDept(departmentName)));
+								response.setStatus(HttpServletResponse.SC_OK);
 								return;
 							}
 						else
 						{
-							response.sendError(HttpServletResponse.SC_NOT_FOUND,"No Job_Title in"+departmentName);
+							response.sendError(HttpServletResponse.SC_NOT_FOUND,"No Job_Title in "+departmentName);
+							
 							return;
 						}
 					}
@@ -75,6 +77,7 @@ public class JobTitleController extends HttpServlet {
 					if(pattern[2].equals("job_titles"))
 						{
 							response.getWriter().print(gson.toJson(jobTitleDetails.getJobTitles()));
+							response.setStatus(HttpServletResponse.SC_OK);
 							return;
 						}
 					else {

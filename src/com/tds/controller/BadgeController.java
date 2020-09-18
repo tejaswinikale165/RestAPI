@@ -26,10 +26,10 @@ public class BadgeController extends HttpServlet {
     }
     //Handling get request for two url types /badges, /badges?badge_number='value' and /badges/active using switch to matching the pattern 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//Checking for authentication
-		if(!("candidate".equals((String) this.getServletContext().getInitParameter("username"))&& "INTtestv1".equals((String)request.getServletContext().getInitParameter("password"))))
+		//Checking for authentication, this parameter is set in servlet listener when connect to database
+		if("false".equals((String) this.getServletContext().getInitParameter("authorized")))
 			{
-				response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+				response.sendError(HttpServletResponse.SC_UNAUTHORIZED,"Invalid username or password");
 				return;
 			}
 		try {
@@ -46,6 +46,7 @@ public class BadgeController extends HttpServlet {
 					if (param==null)
 						{
 							response.getWriter().print(gson.toJson(badgeDetails.getBadges()));
+							response.setStatus(HttpServletResponse.SC_OK);
 							return;
 						}
 					else 
@@ -63,6 +64,7 @@ public class BadgeController extends HttpServlet {
 									else
 										{
 											response.getWriter().print(gson.toJson(jsonBadge));
+											response.setStatus(HttpServletResponse.SC_OK);
 											return;
 										}
 									}
@@ -82,6 +84,7 @@ public class BadgeController extends HttpServlet {
 					else
 						{
 							response.getWriter().print(gson.toJson(badgeDetails.getBadgesByStatus()));
+							response.setStatus(HttpServletResponse.SC_OK);
 							return;
 						}
 				

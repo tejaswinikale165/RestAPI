@@ -24,10 +24,10 @@ public class DepartmentController extends HttpServlet {
 
     //Handling get request for url types /department  
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//Checking for authentication
-		if(!("candidate".equals((String) this.getServletContext().getInitParameter("username"))&& "INTtestv1".equals((String)request.getServletContext().getInitParameter("password"))))
+		//Checking for authentication, this parameter is set in servlet listener when connect to database
+		if("false".equals((String) this.getServletContext().getInitParameter("authorized")))
 				{
-					response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+					response.sendError(HttpServletResponse.SC_UNAUTHORIZED,"Invalid username or password");
 					return;
 				}
 		
@@ -37,6 +37,7 @@ public class DepartmentController extends HttpServlet {
 		try {
 				String jsonDList = gson.toJson(departmentDetails.getDepartments());
 				response.getWriter().print(jsonDList);
+				response.setStatus(HttpServletResponse.SC_OK);
 				return;
 		   } 
 		catch (SQLException e) {

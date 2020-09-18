@@ -24,23 +24,27 @@ public class DataConnection implements ServletContextListener {
 		String username=context.getInitParameter("username");
 		String password=context.getInitParameter("password");
 		
-		createConnection(url,username,password);
+		createConnection(url,username,password,event);
 		
 	}
 	//Method creates connection and set it to use it later
-	public void createConnection(String url,String username,String password)
+	public void createConnection(String url,String username,String password,ServletContextEvent event)
 	{
+		ServletContext context=event.getServletContext();
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			Connection conn=DriverManager.getConnection(url,username,password);
 			DataConnectionDao.setConn(conn);
 			DataConnectionDao.setStatement();
+			context.setInitParameter("authorized", "true");
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
+		
 			e.printStackTrace();
 		}
 		 catch (SQLException e) {
-			// TODO Auto-generated catch block
+			if(e.getErrorCode()==1017) {
+				context.setInitParameter("authorized", "false");
+			}
 			e.printStackTrace();
 		}
 	}

@@ -28,10 +28,10 @@ public class EmployeeController extends HttpServlet {
     }
     //Handling get request for two url types /employees,/employee?department_name='value' and /employees/active using switch to matching the pattern
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//Checking for authentication
-		if(!("candidate".equals((String) this.getServletContext().getInitParameter("username"))&& "INTtestv1".equals((String)request.getServletContext().getInitParameter("password"))))
+		//Checking for authentication, this parameter is set in servlet listener when connect to database
+		if("false".equals((String) this.getServletContext().getInitParameter("authorized")))
 			{
-				response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+				response.sendError(HttpServletResponse.SC_UNAUTHORIZED,"Invalid username or password");
 				return;
 			}
 			
@@ -59,6 +59,7 @@ public class EmployeeController extends HttpServlet {
 					if (param==null)
 						{
 							response.getWriter().print(gson.toJson(employeeDetails.getEmployees()));
+							response.setStatus(HttpServletResponse.SC_OK);
 							return;
 						}
 					else 
@@ -69,6 +70,7 @@ public class EmployeeController extends HttpServlet {
 								
 									{
 										response.getWriter().print(gson.toJson(employeeDetails.getEmployeeByDept(param)));
+										response.setStatus(HttpServletResponse.SC_OK);
 										return;
 									}
 								else
@@ -95,6 +97,7 @@ public class EmployeeController extends HttpServlet {
 					else
 						{
 							response.getWriter().print(gson.toJson(employeeDetails.getEmployeeByStatus()));
+							response.setStatus(HttpServletResponse.SC_OK);
 							return;
 						}
 				
